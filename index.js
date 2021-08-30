@@ -27,19 +27,21 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //   // logging: logger.debug.bind(logger)
 // });
 
-try {
-  await sequelize.authenticate();
-  if (process.env.NODE_ENV === 'development') {
-    await sequelize.sync({ alter: true }); 
-    // NOT recommended for production; use migrations - https://sequelize.org/master/manual/migrations.html
+(async () => {
+  try {
+    await sequelize.authenticate();
+    if (process.env.NODE_ENV === 'development') {
+      await sequelize.sync({ alter: true }); 
+      // NOT recommended for production; use migrations - https://sequelize.org/master/manual/migrations.html
+    }
+    logger.info('Database connected');
+    const PORT = process.env.PORT || 4000;
+    app.listen(PORT).on('listening', () => logger.info(`Server listening on Port ${PORT}`))
+      .on('error', (err) => { logger.error(`Server | ${err.message}`); });
+  } catch (error) {
+    logger.error(`Database Error: ${error.message}`);
   }
-  logger.info('Database connected');
-  const PORT = process.env.PORT || 4000;
-  app.listen(PORT).on('listening', () => logger.info('Server listening'))
-    .on('error', (err) => { logger.error(`Server | ${err.message}`); });
-} catch (error) {
-  logger.error(`Database Error: ${error.message}`);
-}
+})();
 
 // map endpoint path to route file
 app.use('/api/v1/posts', postRoutes);

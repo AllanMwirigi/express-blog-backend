@@ -1,7 +1,7 @@
 
 const router = require('express').Router();
 const {
-  createComment, getComment, getAllComments, updateComment, deleteComment
+  createComment, getCommentsOfPost, updateComment, deleteComment
 } = require('../controllers/comments');
 
 router.post('/', createComment);

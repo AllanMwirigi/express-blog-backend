@@ -14,7 +14,7 @@ exports.createPost = async (req, res, next) => {
 
 exports.getPost = async (req, res, next) => {
   try {
-    const post = await Post.findById(req.params.id).lean().exec();
+    const post = await Post.findOne({ where: { id } });
     if (!post) {
       res.sendStatus(404);
       return;
@@ -27,7 +27,7 @@ exports.getPost = async (req, res, next) => {
 
 exports.getAllPosts = async (req, res, next) => {
   try {
-    const posts = await Post.find({}).lean().exec();
+    const posts = await Post.findAll();
     res.status(200).json(posts);
   } catch (error) {
     next(error);
@@ -38,8 +38,8 @@ exports.updatePost = async (req, res, next) => {
   try {
     const { id } = req.params;
     const update = req.body;
-    const result = await Post.updateOne({ _id: id }, update).exec();
-    if (result.n === 0) {
+    const result = await Post.update(update, { where: { id } });
+    if (result[0] === 0) {
       res.sendStatus(404);
       return;
     }
@@ -51,8 +51,8 @@ exports.updatePost = async (req, res, next) => {
 
 exports.deletePost = async (req, res, next) => {
   try {
-    const result = await Post.deleteOne({ _id: req.params.id }).exec();
-    if (result.n === 0) {
+    const rows = await Post.destroy({ where: { id } });
+    if (rows === 0) {
       res.sendStatus(404);
       return;
     }
