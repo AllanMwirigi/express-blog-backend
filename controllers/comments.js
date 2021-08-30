@@ -4,9 +4,9 @@ const Comment = require('../models/Comment');
 
 exports.createComment = async (req, res, next) => {
   try {
-    const post = new Comment(req.body);
-    const doc = await post.save();
-    res.status(201).json({ postId: doc._id });
+    const comment = Comment.build(req.body);
+    await comment.save();
+    res.status(201).json({ commentId: comment.id });
   } catch (error) {
     next(error);
   }
@@ -14,12 +14,8 @@ exports.createComment = async (req, res, next) => {
 
 exports.getCommentsOfPost = async (req, res, next) => {
   try {
-    const post = await Comment.findById(req.params.postId).lean().exec();
-    if (!post) {
-      res.sendStatus(404);
-      return;
-    }
-    res.status(200).json(post);
+    const comments = await Comment.findAll({ where: { postId: req.params.postId } });
+    res.status(200).json(comments);
   } catch (error) {
     next(error);
   }
@@ -29,8 +25,8 @@ exports.updateComment = async (req, res, next) => {
   try {
     const { id } = req.params;
     const update = req.body;
-    const result = await Comment.updateOne({ _id: id }, update).exec();
-    if (result.n === 0) {
+    const result = await Comment.update(update, { where: { id } })
+    if (result[0] === 0) {
       res.sendStatus(404);
       return;
     }
@@ -42,8 +38,8 @@ exports.updateComment = async (req, res, next) => {
 
 exports.deleteComment = async (req, res, next) => {
   try {
-    const result = await Comment.deleteOne({ _id: req.params.id }).exec();
-    if (result.n === 0) {
+    const rows = await Comment.destroy({ where: { id: req.params.id }});
+    if (rows === 0) {
       res.sendStatus(404);
       return;
     }

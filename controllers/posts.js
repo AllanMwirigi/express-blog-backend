@@ -14,7 +14,7 @@ exports.createPost = async (req, res, next) => {
 
 exports.getPost = async (req, res, next) => {
   try {
-    const post = await Post.findOne({ where: { id } });
+    const post = await Post.findByPk(id);
     if (!post) {
       res.sendStatus(404);
       return;
@@ -51,6 +51,7 @@ exports.updatePost = async (req, res, next) => {
 
 exports.deletePost = async (req, res, next) => {
   try {
+    const { id } = req.params;
     const rows = await Post.destroy({ where: { id } });
     if (rows === 0) {
       res.sendStatus(404);
