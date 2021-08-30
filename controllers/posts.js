@@ -1,5 +1,4 @@
-/* eslint-disable no-underscore-dangle */
-
+const Comment = require('../models/Comment');
 const Post = require('../models/Post');
 
 exports.createPost = async (req, res, next) => {
@@ -14,7 +13,7 @@ exports.createPost = async (req, res, next) => {
 
 exports.getPost = async (req, res, next) => {
   try {
-    const post = await Post.findByPk(id);
+    const post = await Post.findByPk(id, { include: Comment });
     if (!post) {
       res.sendStatus(404);
       return;

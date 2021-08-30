@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-
 const Comment = require('../models/Comment');
 
 exports.createComment = async (req, res, next) => {
@@ -15,6 +13,8 @@ exports.createComment = async (req, res, next) => {
 exports.getCommentsOfPost = async (req, res, next) => {
   try {
     const comments = await Comment.findAll({ where: { postId: req.params.postId } });
+    // const comments = await Comment.findAll({ where: { postId: req.params.postId }, raw: true });
+    // Sequelize automatically wraps everything in proper instance objects. In a few cases, when there are too many results, this wrapping can be inefficient. To disable this wrapping and receive a plain response instead, pass { raw: true } as an option to the finder method. 
     res.status(200).json(comments);
   } catch (error) {
     next(error);
