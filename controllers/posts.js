@@ -4,9 +4,9 @@ const Post = require('../models/Post');
 
 exports.createPost = async (req, res, next) => {
   try {
-    const post = new Post(req.body);
-    const doc = await post.save();
-    res.status(201).json({ postId: doc._id });
+    const post = Post.build(req.body);
+    await post.save();
+    res.status(201).json({ postId: post.id });
   } catch (error) {
     next(error);
   }
