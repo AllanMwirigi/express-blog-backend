@@ -10,7 +10,7 @@ In the project directory:
 `npm install`
 
 ### Set Environment Variables
-Need to create a .env file. The required variables can be found in the .env-sample
+Need to create a .env file. The required variables can be found in the .env.schema file
 
 ### Run the app
 `npm start`
