@@ -1,9 +1,9 @@
 const { Sequelize } = require('sequelize');
 
-const { MYSQL_DBNAME, MYSQL_USER, MYSQL_PASS } = process.env;
+const { MYSQL_HOST, MYSQL_DBNAME, MYSQL_USER, MYSQL_PASS } = process.env;
 
 const sequelize = new Sequelize(MYSQL_DBNAME, MYSQL_USER, MYSQL_PASS, {
-  host: 'localhost',
+  host: MYSQL_HOST,
   dialect: 'mysql',
   logging: false,                        // Disables logging
   pool: {

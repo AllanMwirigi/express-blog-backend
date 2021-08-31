@@ -1,7 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-require('dotenv').config();
+// require('dotenv').config();
+require('dotenv-extended').load({ 
+  schema: '.env.schema', errorOnMissing: true, silent: true,
+  includeProcessEnv: true, overrideProcessEnv: true
+});
 const sequelize = require('./utils/sequelize');
 const logger = require('./utils/winston');
 const postRoutes = require('./routes/posts');
@@ -16,18 +20,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // parse request bodies
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-
-// const { MYSQL_DBNAME, MYSQL_USER, MYSQL_PASS } = process.env;
-
-// const sequelize = new Sequelize(MYSQL_DBNAME, MYSQL_USER, MYSQL_PASS, {
-//   host: 'localhost',
-//   dialect: 'mysql',
-//   logging: false,                        // Disables logging
-//   // logging: msg => logger.debug(msg),     // Use custom logger (e.g. Winston or Bunyan), displays the first parameter
-//   // logging: logger.debug.bind(logger)
-// });
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 (async () => {
   try {
@@ -40,8 +34,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
     }
     logger.info('Database connected');
     const PORT = process.env.PORT || 4000;
-    app.listen(PORT).on('listening', () => logger.info(`Server listening on Port ${PORT}`))
-      .on('error', (err) => { logger.error(`Server | ${err.message}`); });
+    app.listen(PORT).on('listening', () => logger.info(`Server listening (${process.env.NODE_ENV}) on Port ${PORT}`))
+      .on('error', (err) => { logger.error(`Server | ${err.message}`); 
+    });
   } catch (error) {
     logger.error(`Database Error: ${error.message}`);
     console.error(error);
@@ -76,7 +71,7 @@ app.use((err, req, res, next) => {
     logger.error(`${req.url} | ${err.message}`);
     return;
   }
-  // otherwise we handle it
+  // otherwise handle it here
   // set status to the status code of the error, otherwise 500 is default e.g. for db errors
   res.status(err.status || 500);
   res.set({ 'Content-type': 'application/json' });
