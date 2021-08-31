@@ -4,7 +4,7 @@
   "description": "REST API for CRUD operations on a blog",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "NODE_ENV=development node index.js",
     "start:dev": "NODE_ENV=development nodemon index.js"
   },
   "author": "Allan Mwirigi",
