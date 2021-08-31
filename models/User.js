@@ -11,14 +11,4 @@ const User = sequelize.define('User', {
   bio: { type: DataTypes.TEXT, allowNull: false, },
 });
 
-User.hasMany(Post, {
-  foreignKey: { allowNull: false },
-  onDelete: 'CASCADE', // if user is deleted, their posts should be deleted as well
-});
-
-User.hasMany(Comment, {
-  foreignKey: { allowNull: false },
-  onDelete: 'CASCADE', // if user is deleted, their comments should be deleted as well
-});
-
 module.exports = User;

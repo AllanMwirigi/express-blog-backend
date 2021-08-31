@@ -6,6 +6,8 @@ const sequelize = require('./utils/sequelize');
 const logger = require('./utils/winston');
 const postRoutes = require('./routes/posts');
 const commentRoutes = require('./routes/comments');
+const userRoutes = require('./routes/users');
+const initRelationships = require('./models/relationships');
 
 const app = express();
 
@@ -30,7 +32,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 (async () => {
   try {
     await sequelize.authenticate();
+    initRelationships();
     if (process.env.NODE_ENV === 'development') {
+      // await sequelize.sync({ force: true });
       await sequelize.sync({ alter: true }); 
       // NOT recommended for production; use migrations - https://sequelize.org/master/manual/migrations.html
     }
@@ -40,12 +44,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
       .on('error', (err) => { logger.error(`Server | ${err.message}`); });
   } catch (error) {
     logger.error(`Database Error: ${error.message}`);
+    console.error(error);
   }
 })();
 
 // map endpoint path to route file
 app.use('/api/v1/posts', postRoutes);
 app.use('/api/v1/comments', commentRoutes);
+app.use('/api/v1/users', userRoutes);
 
 // any invalid endpoints that don't match the above are handled here
 app.use((req, res, next) => {

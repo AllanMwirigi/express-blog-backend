@@ -21,6 +21,15 @@ exports.getCommentsOfPost = async (req, res, next) => {
   }
 };
 
+exports.getAllComments = async (req, res, next) => {
+  try {
+    const comments = await Comment.findAll();
+    res.status(200).json(comments);
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.updateComment = async (req, res, next) => {
   try {
     const { id } = req.params;

@@ -1,5 +1,6 @@
 const Comment = require('../models/Comment');
 const Post = require('../models/Post');
+const User = require('../models/User');
 
 exports.createPost = async (req, res, next) => {
   try {
@@ -13,7 +14,9 @@ exports.createPost = async (req, res, next) => {
 
 exports.getPost = async (req, res, next) => {
   try {
-    const post = await Post.findByPk(id, { include: Comment });
+    const post = await Post.findByPk(id, { include: [User, {model: Comment, as: 'comments'}] });
+    // const post = await Post.findByPk(id, { include: [{ model: User, as: 'author' }, Comment] });
+    // const post = await Post.findByPk(id, { include: ['author', 'comments'] });
     if (!post) {
       res.sendStatus(404);
       return;
@@ -26,7 +29,7 @@ exports.getPost = async (req, res, next) => {
 
 exports.getAllPosts = async (req, res, next) => {
   try {
-    const posts = await Post.findAll();
+    const posts = await Post.findAll({ include: [User, {model: Comment, as: 'comments'}] });
     res.status(200).json(posts);
   } catch (error) {
     next(error);

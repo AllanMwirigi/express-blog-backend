@@ -12,10 +12,4 @@ const Post = sequelize.define('Post', {
   // Other model options go here
 });
 
-Post.hasMany(Comment, {
-  foreignKey: { allowNull: false },
-  onDelete: 'CASCADE', // if post is deleted, comments should be deleted as well
-});
-Post.belongsTo(User, { foreignKey: 'authorId' }); // customize foreignKey name; would default to userId
-
 module.exports = Post;

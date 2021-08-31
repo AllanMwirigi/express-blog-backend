@@ -9,7 +9,5 @@ const Comment = sequelize.define('Comment', {
   // postId: { type: DataTypes.INTEGER, allowNull: false } 
 }, {});
 
-Comment.belongsTo(Post);
-Comment.belongsTo(User);
 
 module.exports = Comment;
