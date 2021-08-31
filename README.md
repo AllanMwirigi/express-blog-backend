@@ -4,16 +4,16 @@ This includes operations on Users, Posts and Comments.
 
 ## Running the app
 
-In the project directory,:
+In the project directory:
 
-Install dependencies
-### `npm install`
+### Install dependencies
+`npm install`
 
-## Set Environment Variables
+### Set Environment Variables
 Need to create a .env file. The required variables can be found in the .env-sample
 
-Run the app with nodemon
-### `npm run start:dev`
+### Run the app
+`npm start`
 
-Runs the app
-### `npm start`
+### Run the app with nodemon
+`npm run start:dev`
