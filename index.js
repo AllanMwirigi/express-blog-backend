@@ -34,7 +34,7 @@ app.use(express.urlencoded({ extended: false }));
     }
     logger.info('Database connected');
     const PORT = process.env.PORT || 4000;
-    app.listen(PORT).on('listening', () => logger.info(`Server listening (${process.env.NODE_ENV}) on Port ${PORT}`))
+    app.listen(PORT).on('listening', () => logger.info(`Server listening on Port ${PORT} | Env: ${process.env.NODE_ENV}`))
       .on('error', (err) => { logger.error(`Server | ${err.message}`); 
     });
   } catch (error) {
